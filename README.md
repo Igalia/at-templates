@@ -26,20 +26,70 @@ needed. See its [README](packages/at-template/README.md) for the language and AP
 
 ### [`packages/at-app-handlers`](packages/at-app-handlers) — `@igalia-experiments/at-app-handlers`
 
-The data: one JSON file per app, listing which record collections it can open and
-the URL template for each. The package's `index.js` reads them all and exports a
+It contains information abuot which apps can open which collections at which URL.
 
+The data is available either at `@igalia-experiments/at-app-handlers`:
+```jsonc
+{
+  "app.bsky.feed.post": [
+    {
+      "appName": "Bluesky",
+      "urlTemplate": "https://bsky.app/profile/{repo}/post/{rkey}",
+      "label": "View post"
+    },
+    {
+      "appName": "Blacksky",
+      "urlTemplate": "https://blacksky.app/profile/{repo}/post/{rkey}",
+      "label": "View post"
+    }
+  ],
+  // ...
+}
 ```
-Map<collection, Array<{ appName, urlTemplate, label? }>>
+or in individual per-app files, such as `@igalia-experiments/at-app-handlers/handlers/app.bsky.json`:
+```jsonc
+{
+  "appName": "Bluesky",
+  "handlers": [
+    {
+      "collection": "app.bsky.feed.post",
+      "urlTemplate": "https://bsky.app/profile/{repo}/post/{rkey}",
+      "label": "View post"
+    },
+    // ...
+  ]
+}
 ```
 
-A collection can map to several apps (e.g. `app.bsky.feed.post` opens in both
-Bluesky and Blacksky), and one app can offer several destinations for a collection
-(e.g. a list-item opens either the list or the added member) — hence an array.
+### [`packages/at-record-previews`](packages/at-record-previews) — `@igalia-experiments/at-record-previews`
+
+It contains information about how to show a human-friendly preview of a record.
+
+The data is available at `@igalia-experiments/at-record-previews` as a map from collection to a template:
+
+```jsonc
+{
+  "app.bsky.feed.post": {
+    "template": "{value.text}",
+    "label": "Post text"
+  },
+  // ...
+}
+```
+
+or in individual per-collection files, such as `@igalia-experiments/at-record-previews/previews/app/bsky/app.bsky.feed.post.json`:
+
+```jsonc
+{
+  "template": "{value.text}",
+  "label": "Post text"
+}
+```
 
 ### [`lexicons/`](lexicons)
 
-The `com.example.app.handlers` Lexicon schema describing a handler record.
+The `com.example.app.handlers` (handler) and `com.example.record.preview` (preview)
+Lexicon schemas.
 
 ## Usage
 

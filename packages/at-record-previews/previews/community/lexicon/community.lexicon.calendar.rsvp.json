@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "community.lexicon.calendar.rsvp",
+  "template": "{value.subject.uri->name}"
+}

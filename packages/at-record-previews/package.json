@@ -1,0 +1,25 @@
+{
+  "name": "@igalia-experiments/at-record-previews",
+  "version": "0.0.1",
+  "description": "Templates for rendering short, human-readable previews of AT Protocol records (com.example.record.preview).",
+  "author": "Nicolò Ribaudo",
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "prepack": "node scripts/build.js",
+    "test": "node scripts/build.js && node --test"
+  },
+  "files": [
+    "previews",
+    "index.json"
+  ],
+  "type": "module",
+  "main": "./index.json",
+  "exports": {
+    ".": "./index.json",
+    "./*": "./previews/*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

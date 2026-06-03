@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "sh.tangled.graph.vouch",
+  "template": "@{rkey->alsoKnownAs.0|atUriAuthority}"
+}

@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "blog.pckt.publication",
+  "template": "{value.publication.uri->name}"
+}

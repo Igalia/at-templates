@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "fyi.atstore.listing.favorite",
+  "template": "{value.subject->name}"
+}

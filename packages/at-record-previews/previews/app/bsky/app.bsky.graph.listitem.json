@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "app.bsky.graph.listitem",
+  "template": "{value.list->name}"
+}

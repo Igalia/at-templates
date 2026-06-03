@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "dev.keytrace.claim",
+  "template": "{value.type}: {value.identity.subject}"
+}

@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "chat.bsky.actor.declaration",
+  "template": "{value.allowIncoming}"
+}

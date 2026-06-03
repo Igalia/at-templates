@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "id.sifa.profile.self",
+  "template": "{value.about}"
+}

@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "app.bsky.feed.repost",
+  "template": "{value.subject.uri->text}"
+}

@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "sh.tangled.feed.reaction",
+  "template": "{value.reaction}"
+}

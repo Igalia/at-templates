@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "id.sifa.graph.follow",
+  "template": "@{value.subject->alsoKnownAs.0|atUriAuthority}"
+}

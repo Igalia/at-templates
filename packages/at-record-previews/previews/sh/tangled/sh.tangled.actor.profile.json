@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "sh.tangled.actor.profile",
+  "template": "@{value.preferredHandle}"
+}

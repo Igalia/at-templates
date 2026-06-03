@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "dev.npmx.actor.profile",
+  "template": "{value.displayName}"
+}

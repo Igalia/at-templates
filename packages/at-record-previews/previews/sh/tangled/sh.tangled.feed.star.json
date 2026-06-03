@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "sh.tangled.feed.star",
+  "template": "@{value.subject.did->alsoKnownAs.0|atUriAuthority}"
+}

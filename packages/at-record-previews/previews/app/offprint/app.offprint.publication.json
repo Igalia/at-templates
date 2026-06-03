@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "app.offprint.publication",
+  "template": "{value.publication->name}"
+}

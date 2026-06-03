@@ -10,6 +10,8 @@ importers:
 
   packages/at-app-handlers: {}
 
+  packages/at-record-previews: {}
+
   packages/at-template:
     devDependencies:
       '@types/node':

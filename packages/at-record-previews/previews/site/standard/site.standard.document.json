@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "site.standard.document",
+  "template": "{value.title}"
+}

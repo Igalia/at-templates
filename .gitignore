@@ -1,3 +1,5 @@
 node_modules
 lib
 packages/at-app-handlers/index.json
+packages/at-record-previews/index.json
+.tmp

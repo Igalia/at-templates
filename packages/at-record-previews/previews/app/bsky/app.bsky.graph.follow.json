@@ -1,0 +1,5 @@
+{
+  "$type": "com.example.record.preview",
+  "collection": "app.bsky.graph.follow",
+  "template": "@{value.subject->alsoKnownAs.0|atUriAuthority}"
+}
