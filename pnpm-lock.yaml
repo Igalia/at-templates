@@ -8,7 +8,7 @@ importers:
 
   .: {}
 
-  packages/open-with-atproto:
+  packages/at-template:
     devDependencies:
       '@types/node':
         specifier: ^25.9.1

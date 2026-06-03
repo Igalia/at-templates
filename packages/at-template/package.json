@@ -1,6 +1,6 @@
 {
-  "name": "open-with-atproto",
-  "version": "1.0.0",
+  "name": "@igalia/at-template",
+  "version": "0.0.1",
   "description": "",
   "type": "module",
   "main": "index.js",
