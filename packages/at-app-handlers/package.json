@@ -5,15 +5,18 @@
   "author": "Nicolò Ribaudo",
   "license": "MIT",
   "scripts": {
-    "test": "node --test"
+    "build": "node scripts/build.js",
+    "prepack": "node scripts/build.js",
+    "test": "node scripts/build.js && node --test"
   },
   "files": [
     "handlers",
-    "index.js"
+    "index.json"
   ],
   "type": "module",
+  "main": "./index.json",
   "exports": {
-    ".": "./index.js",
+    ".": "./index.json",
     "./*": "./handlers/*"
   },
   "publishConfig": {

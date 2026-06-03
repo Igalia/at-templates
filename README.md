@@ -45,7 +45,7 @@ The `com.example.app.handlers` Lexicon schema describing a handler record.
 
 ```ts
 import { parse, evaluateRecord } from "@igalia-experiments/at-template";
-import handlersByCollection from "@igalia-experiments/at-app-handlers";
+import handlersByCollection from "@igalia-experiments/at-app-handlers" with { type: "json" };
 
 const record = {
   collection: "app.bsky.feed.post",
@@ -57,7 +57,7 @@ const record = {
   },
 };
 
-const handlers = handlersByCollection.get(record.collection) ?? [];
+const handlers = handlersByCollection[record.collection] ?? [];
 for (const { appName, urlTemplate, label } of handlers) {
   const url = await evaluateRecord(parse(urlTemplate), context);
   console.log(appName, label ?? "", url);
