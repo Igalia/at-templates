@@ -19,62 +19,78 @@ export type EvaluateRecordOptions = {
   // Resolves an `at://` URI to the referenced record's value (for `->`).
   // Defaults to `getRecordValue` (public XRPC over fetch).
   fetchRecord?: (atUri: string) => Promise<any>;
+  // Resolves a bare DID to its DID document (for `->`).
+  // Defaults to `getDidDocument` (DID resolution over fetch).
+  fetchDidDocument?: (did: string) => Promise<any>;
   onMissing?: (obj: any, property: string) => void;
 };
 
-// Evaluate a parsed handler template against a record, fetching any referenced
-// records (`->`) as needed.
+// Evaluate a parsed handler template against a record, dereferencing references
+// (`->`) as needed: an `at://` URI resolves to a record, a bare DID to its DID
+// document.
 export function evaluateRecord(
   template: Template,
   context: RecordContext,
-  options: EvaluateRecordOptions = {},
+  {
+    transforms = defaultTransforms,
+    fetchRecord = getRecordValue,
+    fetchDidDocument = getDidDocument,
+    onMissing,
+  }: EvaluateRecordOptions = {},
 ): Promise<string> {
   return evaluateAsync(template, {
     context,
-    transforms: options.transforms ?? defaultTransforms,
-    fetchRemote: options.fetchRecord ?? getRecordValue,
-    onMissing: options.onMissing,
+    transforms,
+    fetchRemote: (ref: string) =>
+      ref.startsWith("at://") ? fetchRecord(ref) : fetchDidDocument(ref),
+    onMissing,
   });
 }
 
 // Minimal AT Protocol helpers over plain fetch — public XRPC, no auth, no SDK.
 // Resolves a DID's PDS and reads records, so a template can dereference the
-// `at://` URIs a record points at.
+// `at://` URIs (and DIDs) a record points at.
 
-const pdsCache = new Map<string, string | null>();
+const docCache = new Map<string, any>();
 
-// Resolve a DID (or did:web) to its PDS service endpoint, or null if not found.
-async function pdsFor(authority: string): Promise<string | null> {
-  if (pdsCache.has(authority)) return pdsCache.get(authority)!;
-  let pds: string | null = null;
+// Resolve a DID (or did:web) to its DID document, or null if not found.
+async function getDidDocument(did: string): Promise<any> {
+  if (docCache.has(did)) return docCache.get(did);
+  let doc = null;
   try {
-    const doc = await getJSON(
-      authority.startsWith("did:web:")
-        ? `https://${authority.slice("did:web:".length).replace(/:/g, "/")}/.well-known/did.json`
-        : `https://plc.directory/${authority}`,
+    doc = await getJSON(
+      did.startsWith("did:web:")
+        ? `https://${did.slice("did:web:".length).replace(/:/g, "/")}/.well-known/did.json`
+        : `https://plc.directory/${did}`,
     );
-    pds =
-      (doc.service || []).find(
-        (s: any) => s.type === "AtprotoPersonalDataServer",
-      )?.serviceEndpoint ?? null;
   } catch {
-    pds = null;
+    doc = null;
   }
-  pdsCache.set(authority, pds);
-  return pds;
+  docCache.set(did, doc);
+  return doc;
+}
+
+// Resolve a DID to its PDS service endpoint, or null if not found.
+async function pdsFor(authority: string): Promise<string | null> {
+  const doc = await getDidDocument(authority);
+  return (
+    (doc?.service || []).find(
+      (s: any) => s.type === "AtprotoPersonalDataServer",
+    )?.serviceEndpoint ?? null
+  );
 }
 
 const recordCache = new Map<string, any>();
 
-// Fetch a single record's value by at:// URI, used to dereference references.
-// Returns null if the record can't be resolved.
+// Resolve an `at://<authority>/<collection>/<rkey>` URI to that record's value,
+// or null if it can't be resolved.
 async function getRecordValue(atUri: string): Promise<any> {
   if (recordCache.has(atUri)) return recordCache.get(atUri);
 
   let value = null;
   try {
     const [authority, collection, rkey] = atUri
-      .replace(/^at:\/\//, "")
+      .slice("at://".length)
       .split("/");
     const pds = await pdsFor(authority);
     if (pds) {

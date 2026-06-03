@@ -94,4 +94,36 @@ describe("evaluateRecord", () => {
     });
     assert.equal(result, "fallback");
   });
+
+  it("resolves a DID to a handle by dereferencing its DID document", async () => {
+    // a bare DID (not an at:// URI) is routed to fetchDidDocument; alsoKnownAs[0]
+    // is the handle (an at:// URI), and atUriAuthority strips it.
+    const seen: string[] = [];
+    const fetchDidDocument = async (did: string) => {
+      seen.push(did);
+      return { alsoKnownAs: ["at://alice.test"], service: [] }; // a DID document
+    };
+    const result = await evaluateRecord(
+      parse("{value.subject->alsoKnownAs.0|atUriAuthority}"),
+      ctx({
+        collection: "app.bsky.graph.follow",
+        value: { subject: "did:plc:followed" },
+      }),
+      { fetchRecord: noFetch, fetchDidDocument },
+    );
+    assert.equal(result, "alice.test");
+    assert.deepEqual(seen, ["did:plc:followed"]);
+  });
+
+  it("routes at:// references to fetchRecord, not fetchDidDocument", async () => {
+    const didCall = async () => {
+      throw new Error("fetchDidDocument should not be called for an at:// ref");
+    };
+    const result = await evaluateRecord(
+      parse("{value.uri->title}"),
+      ctx({ value: { uri: "at://did:plc:x/com.example/1" } }),
+      { fetchRecord: async () => ({ title: "Hello" }), fetchDidDocument: didCall },
+    );
+    assert.equal(result, "Hello");
+  });
 });

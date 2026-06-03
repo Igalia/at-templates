@@ -18,14 +18,15 @@ Inside a placeholder, an expression is built from:
 | `value` | reference | a name looked up in the context |
 | `value.foo.bar` | property | a dotted path into the referenced value |
 | `expr\|fn` | transform | apply a named function to the result (chainable) |
-| `expr->foo.bar` | remote | treat `expr` as an `at://` URI, fetch that record, read `foo.bar` (chainable) |
+| `expr->foo.bar` | remote | dereference `expr` (at URI to a record, or DID to DID doc), read `foo.bar` (chainable) |
 
 Identifiers are `[a-zA-Z0-9]+`. Examples:
 
 ```
-{value.subject.uri|atUriRkey}   # a field, with a transform
-{value.publication.uri->url}    # follow an at:// URI, read .url
-{value.document.uri->site->url} # two hops
+{value.subject.uri|atUriRkey}                  # a field, with a transform
+{value.publication.uri->url}                   # follow an at:// URI, read .url
+{value.document.uri->site->url}                # two hops
+{value.subject->alsoKnownAs.0|atUriAuthority}  # a bare DID → its DID doc → handle
 ```
 
 ## Install
@@ -57,8 +58,9 @@ be done synchronously.
 
 ### `evaluateRecord(template, context, options?): Promise<string>`
 
-The AT Protocol entry point: evaluate a parsed template against a record, fetching
-referenced records over public XRPC when a `->` is encountered.
+The AT Protocol entry point: evaluate a parsed template against a record, resolving
+references over public XRPC when a `->` is encountered — an `at://` URI to the
+referenced record, or a bare DID to its DID document.
 
 ```ts
 import { parse, evaluateRecord } from "@igalia-experiments/at-template";
@@ -80,9 +82,10 @@ const url = await evaluateRecord(
 
 - `transforms` — override the function set (default: `defaultTransforms`, the
   `at://` helpers below).
-- `fetchRecord(atUri) => Promise<any>` — how `->` resolves a referenced record's
-  value. While we provide a default implementation of this method, it's not
-  production-ready, so you may want to provide your own.
+- `fetchRecord(atUri) => Promise<any>` — how `->` resolves an `at://` URI to the
+  referenced record's `value`.
+- `fetchDidDocument(did) => Promise<any>` — how `->` resolves a bare DID (`did:…`)
+  to its DID document.
 - `onMissing(obj, property)` — called when a property read misses; by default it
   throws. Its return value is used as the resolved value, so you can supply a
   fallback or a sentinel.
@@ -95,7 +98,7 @@ from `./evaluate.ts`):
 - `evaluateSync(template, { context, transforms?, onMissing? }): string` — throws
   if the template needs remote resolution.
 - `evaluateAsync(template, { fetchRemote, context, transforms?, onMissing? }): Promise<string>`
-  — `fetchRemote(atUri)` resolves each `->` hop.
+  — `fetchRemote(ref)` resolves each `->` hop; `ref` is whatever the left side evaluated to.
 
 `context` is a plain `{ [name]: any }`; `transforms` is `{ [name]: (arg) => any }`.
 
