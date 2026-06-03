@@ -1,0 +1,15 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "atmo.rsvp",
+  "targets": [
+    {
+      "collection": "community.lexicon.calendar.event",
+      "template": "https://atmo.rsvp/p/{did}/e/{rkey}"
+    },
+    {
+      "collection": "community.lexicon.calendar.rsvp",
+      "template": "https://atmo.rsvp/p/{value.subject.uri|atUriAuthority}/e/{value.subject.uri|atUriRkey}"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

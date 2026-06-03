@@ -1,0 +1,35 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "Sifa",
+  "targets": [
+    {
+      "collection": "id.sifa.profile.self",
+      "template": "https://sifa.id/p/{handle}#about"
+    },
+    {
+      "collection": "id.sifa.profile.education",
+      "template": "https://sifa.id/p/{handle}#education"
+    },
+    {
+      "collection": "id.sifa.profile.position",
+      "template": "https://sifa.id/p/{handle}#career"
+    },
+    {
+      "collection": "id.sifa.profile.language",
+      "template": "https://sifa.id/p/{handle}#languages"
+    },
+    {
+      "collection": "id.sifa.profile.project",
+      "template": "https://sifa.id/p/{handle}#projects"
+    },
+    {
+      "collection": "id.sifa.profile.publication",
+      "template": "https://sifa.id/p/{handle}#publications"
+    },
+    {
+      "collection": "id.sifa.profile.skill",
+      "template": "https://sifa.id/p/{handle}#skills"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

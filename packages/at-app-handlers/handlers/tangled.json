@@ -1,0 +1,39 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "Tangled",
+  "targets": [
+    {
+      "collection": "sh.tangled.repo",
+      "template": "https://tangled.org/{handle}/{value.name}"
+    },
+    {
+      "collection": "sh.tangled.actor.profile",
+      "template": "https://tangled.org/{handle}"
+    },
+    {
+      "collection": "sh.tangled.graph.follow",
+      "template": "https://tangled.org/{value.subject}"
+    },
+    {
+      "collection": "sh.tangled.feed.star",
+      "template": "https://tangled.org/{value.subject|atUriAuthority}/{value.subject->name}"
+    },
+    {
+      "collection": "sh.tangled.feed.reaction",
+      "template": "https://tangled.org/{value.subject->repo|atUriAuthority}/{value.subject->repo->name}"
+    },
+    {
+      "collection": "sh.tangled.graph.vouch",
+      "template": "https://tangled.org/{rkey}"
+    },
+    {
+      "collection": "sh.tangled.publicKey",
+      "template": "https://tangled.org/{handle}"
+    },
+    {
+      "collection": "sh.tangled.repo.collaborator",
+      "template": "https://tangled.org/{value.repo}"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

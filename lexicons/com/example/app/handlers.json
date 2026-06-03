@@ -1,0 +1,54 @@
+{
+  "lexicon": 1,
+  "id": "com.example.app.handlers",
+  "description": "Declares which app can open records of given collections, mapping each record collection to a deep-link URL template.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "any",
+      "record": {
+        "type": "object",
+        "required": ["targets", "createdAt"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "maxGraphemes": 100,
+            "description": "Denormalized app display name, for convenience."
+          },
+          "targets": {
+            "type": "array",
+            "minLength": 1,
+            "items": { "type": "ref", "ref": "#target" },
+            "description": "Collections this app can open, one entry per destination. A collection that opens in more than one place (e.g. a list-item opens either the list or the added member) appears in multiple entries, each with its own label."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    },
+    "target": {
+      "type": "object",
+      "required": ["collection", "template"],
+      "properties": {
+        "collection": {
+          "type": "string",
+          "format": "nsid",
+          "description": "Record collection NSID this app can open."
+        },
+        "template": {
+          "type": "string",
+          "description": "URL template for opening such a record. Placeholders: {repo} (handle if known else DID), {handle}, {did}, {rkey}, {collection}, and {value.<dot.path>} into the record body. A placeholder may dereference another record with '->': {value.subject->name} fetches the at:// URI at value.subject and reads its 'name' (chainable: a->b->c). An optional '|transform' (atUriAuthority, atUriRkey, atUriCollection) extracts a piece of an at:// URI, e.g. {value.subject|atUriAuthority} or {value.subject->repo|atUriAuthority}."
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 100,
+          "maxGraphemes": 50,
+          "description": "Human label for this destination, e.g. \"List\" — used to disambiguate when a collection has more than one entry."
+        }
+      }
+    }
+  }
+}

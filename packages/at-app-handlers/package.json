@@ -1,0 +1,19 @@
+{
+  "name": "@igalia/at-app-handlers",
+  "version": "0.0.1",
+  "description": "JSON handler definitions mapping AT Protocol record collections to the apps that can open them (com.example.app.handlers).",
+  "author": "Nicolò Ribaudo",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test"
+  },
+  "files": [
+    "handlers",
+    "index.js"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./*": "./handlers/*"
+  }
+}

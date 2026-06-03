@@ -1,0 +1,11 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "Offprint",
+  "targets": [
+    {
+      "collection": "app.offprint.publication",
+      "template": "{value.publication->url}"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

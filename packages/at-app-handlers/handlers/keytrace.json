@@ -1,0 +1,11 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "Keytrace",
+  "targets": [
+    {
+      "collection": "dev.keytrace.claim",
+      "template": "https://keytrace.dev/@{handle}"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

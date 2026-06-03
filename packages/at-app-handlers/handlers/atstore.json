@@ -1,0 +1,15 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "ATStore",
+  "targets": [
+    {
+      "collection": "fyi.atstore.listing.favorite",
+      "template": "https://atstore.fyi/products/{value.subject->slug}"
+    },
+    {
+      "collection": "fyi.atstore.profile",
+      "template": "https://atstore.fyi/profile/{handle}"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

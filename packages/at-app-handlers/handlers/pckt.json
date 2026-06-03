@@ -1,0 +1,15 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "pckt.blog",
+  "targets": [
+    {
+      "collection": "blog.pckt.publication",
+      "template": "{value.publication.uri->url}"
+    },
+    {
+      "collection": "blog.pckt.document",
+      "template": "{value.document.uri->site->url}{value.document.uri->path}"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

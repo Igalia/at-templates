@@ -1,0 +1,27 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "Smoke Signal",
+  "targets": [
+    {
+      "collection": "events.smokesignal.calendar.event",
+      "template": "https://smokesignal.events/{did}/{rkey}"
+    },
+    {
+      "collection": "community.lexicon.calendar.event",
+      "template": "https://smokesignal.events/{did}/{rkey}"
+    },
+    {
+      "collection": "community.lexicon.calendar.rsvp",
+      "template": "https://smokesignal.events/{value.subject.uri|atUriAuthority}/{value.subject.uri|atUriRkey}"
+    },
+    {
+      "collection": "events.smokesignal.calendar.rsvp",
+      "template": "https://smokesignal.events/{value.subject.uri|atUriAuthority}/{value.subject.uri|atUriRkey}"
+    },
+    {
+      "collection": "events.smokesignal.app.profile",
+      "template": "https://smokesignal.events/{did}"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

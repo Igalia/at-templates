@@ -1,0 +1,51 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "Anisota",
+  "targets": [
+    {
+      "collection": "net.anisota.beta.game.collection",
+      "template": "https://anisota.net/profile/{handle}"
+    },
+    {
+      "collection": "net.anisota.beta.game.log",
+      "template": "https://anisota.net/profile/{handle}"
+    },
+    {
+      "collection": "net.anisota.beta.game.progress",
+      "template": "https://anisota.net/profile/{handle}"
+    },
+    {
+      "collection": "net.anisota.beta.game.session",
+      "template": "https://anisota.net/profile/{handle}"
+    },
+    {
+      "collection": "net.anisota.chronicle.inventory",
+      "template": "https://anisota.net/profile/{handle}"
+    },
+    {
+      "collection": "net.anisota.chronicle.log.daily",
+      "template": "https://anisota.net/profile/{handle}"
+    },
+    {
+      "collection": "net.anisota.chronicle.log.monthly",
+      "template": "https://anisota.net/profile/{handle}"
+    },
+    {
+      "collection": "net.anisota.chronicle.log.weekly",
+      "template": "https://anisota.net/profile/{handle}"
+    },
+    {
+      "collection": "net.anisota.chronicle.log.yearly",
+      "template": "https://anisota.net/profile/{handle}"
+    },
+    {
+      "collection": "net.anisota.chronicle.progress",
+      "template": "https://anisota.net/profile/{handle}"
+    },
+    {
+      "collection": "net.anisota.player.state",
+      "template": "https://anisota.net/profile/{handle}"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

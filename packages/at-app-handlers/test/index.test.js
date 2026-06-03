@@ -1,0 +1,70 @@
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
+
+import handlersByCollection from "../index.js";
+
+describe("handlersByCollection", () => {
+  it("is a non-empty Map keyed by collection NSID", () => {
+    assert.ok(handlersByCollection instanceof Map);
+    assert.ok(handlersByCollection.size > 0);
+    for (const collection of handlersByCollection.keys()) {
+      assert.equal(typeof collection, "string");
+      assert.ok(collection.includes("."), `not an NSID: ${collection}`);
+    }
+  });
+
+  it("maps each collection to a non-empty array of { appName, urlTemplate, label? } entries", () => {
+    for (const [collection, entries] of handlersByCollection) {
+      assert.ok(Array.isArray(entries), `${collection} is not an array`);
+      assert.ok(entries.length > 0, `${collection} is empty`);
+      for (const entry of entries) {
+        assert.equal(typeof entry.appName, "string");
+        assert.ok(entry.appName.length > 0);
+        assert.equal(typeof entry.urlTemplate, "string");
+        assert.ok(entry.urlTemplate.length > 0);
+        // label is optional, but a string when present
+        if ("label" in entry) {
+          assert.equal(typeof entry.label, "string");
+          assert.ok(entry.label.length > 0);
+        }
+        const allowed = ["appName", "urlTemplate", "label"];
+        for (const key of Object.keys(entry)) {
+          assert.ok(allowed.includes(key), `unexpected key ${key} in ${collection}`);
+        }
+      }
+    }
+  });
+
+  it("maps a known single-app collection", () => {
+    assert.deepEqual(handlersByCollection.get("com.whtwnd.blog.entry"), [
+      { appName: "WhiteWind", urlTemplate: "https://whtwnd.com/{repo}/{rkey}" },
+    ]);
+  });
+
+  it("keeps every app for a collection handled by more than one", () => {
+    const entries = handlersByCollection.get("app.bsky.feed.post");
+    assert.ok(entries.length >= 2);
+    const appNames = entries.map((e) => e.appName);
+    assert.ok(appNames.includes("Bluesky"));
+    assert.ok(appNames.includes("Blacksky"));
+  });
+
+  it("expands a labeled multi-target into one entry per destination", () => {
+    const entries = handlersByCollection.get("app.bsky.graph.listitem");
+    // both Bluesky and Blacksky offer a "List" and a "Member" destination
+    for (const appName of ["Bluesky", "Blacksky"]) {
+      const labels = entries
+        .filter((e) => e.appName === appName)
+        .map((e) => e.label);
+      assert.deepEqual(labels.sort(), ["List", "Member"]);
+    }
+  });
+
+  it("omits label for single-template (string) targets", () => {
+    const entries = handlersByCollection.get("app.bsky.graph.block");
+    assert.ok(entries.length > 0);
+    for (const entry of entries) {
+      assert.ok(!("label" in entry), "string target should have no label");
+    }
+  });
+});

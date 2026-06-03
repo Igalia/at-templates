@@ -1,0 +1,15 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "Standard.site",
+  "targets": [
+    {
+      "collection": "site.standard.publication",
+      "template": "{value.url}"
+    },
+    {
+      "collection": "site.standard.document",
+      "template": "{value.site->url}{value.path}"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

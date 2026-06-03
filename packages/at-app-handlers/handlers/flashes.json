@@ -1,0 +1,19 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "Flashes",
+  "targets": [
+    {
+      "collection": "blue.flashes.actor.profile",
+      "template": "https://flashes.blue/profile/{handle}"
+    },
+    {
+      "collection": "blue.flashes.feed.post",
+      "template": "https://flashes.blue/profile/{handle}"
+    },
+    {
+      "collection": "app.flashes.story",
+      "template": "https://flashes.blue/profile/{handle}"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

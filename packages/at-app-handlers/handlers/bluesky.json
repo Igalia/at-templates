@@ -1,0 +1,65 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "Bluesky",
+  "targets": [
+    {
+      "collection": "app.bsky.feed.post",
+      "template": "https://bsky.app/profile/{repo}/post/{rkey}"
+    },
+    {
+      "collection": "app.bsky.actor.profile",
+      "template": "https://bsky.app/profile/{repo}"
+    },
+    {
+      "collection": "app.bsky.graph.list",
+      "template": "https://bsky.app/profile/{repo}/lists/{rkey}"
+    },
+    {
+      "collection": "app.bsky.feed.generator",
+      "template": "https://bsky.app/profile/{repo}/feed/{rkey}"
+    },
+    {
+      "collection": "app.bsky.graph.starterpack",
+      "template": "https://bsky.app/starter-pack/{repo}/{rkey}"
+    },
+    {
+      "collection": "app.bsky.feed.like",
+      "template": "https://bsky.app/profile/{value.subject.uri|atUriAuthority}/post/{value.subject.uri|atUriRkey}"
+    },
+    {
+      "collection": "app.bsky.feed.repost",
+      "template": "https://bsky.app/profile/{value.subject.uri|atUriAuthority}/post/{value.subject.uri|atUriRkey}"
+    },
+    {
+      "collection": "app.bsky.graph.follow",
+      "template": "https://bsky.app/profile/{value.subject}"
+    },
+    {
+      "collection": "app.bsky.graph.block",
+      "template": "https://bsky.app/profile/{value.subject}"
+    },
+    {
+      "collection": "app.bsky.feed.threadgate",
+      "template": "https://bsky.app/profile/{repo}/post/{rkey}"
+    },
+    {
+      "collection": "app.bsky.feed.postgate",
+      "template": "https://bsky.app/profile/{repo}/post/{rkey}"
+    },
+    {
+      "collection": "app.bsky.graph.listitem",
+      "template": "https://bsky.app/profile/{value.list|atUriAuthority}/lists/{value.list|atUriRkey}",
+      "label": "List"
+    },
+    {
+      "collection": "app.bsky.graph.listitem",
+      "template": "https://bsky.app/profile/{value.subject}",
+      "label": "Member"
+    },
+    {
+      "collection": "chat.bsky.actor.declaration",
+      "template": "https://bsky.app/messages/settings"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

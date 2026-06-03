@@ -1,0 +1,65 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "Blacksky",
+  "targets": [
+    {
+      "collection": "app.bsky.feed.post",
+      "template": "https://blacksky.community/profile/{repo}/post/{rkey}"
+    },
+    {
+      "collection": "app.bsky.actor.profile",
+      "template": "https://blacksky.community/profile/{repo}"
+    },
+    {
+      "collection": "app.bsky.graph.list",
+      "template": "https://blacksky.community/profile/{repo}/lists/{rkey}"
+    },
+    {
+      "collection": "app.bsky.feed.generator",
+      "template": "https://blacksky.community/profile/{repo}/feed/{rkey}"
+    },
+    {
+      "collection": "app.bsky.graph.starterpack",
+      "template": "https://blacksky.community/starter-pack/{repo}/{rkey}"
+    },
+    {
+      "collection": "app.bsky.feed.like",
+      "template": "https://blacksky.community/profile/{value.subject.uri|atUriAuthority}/post/{value.subject.uri|atUriRkey}"
+    },
+    {
+      "collection": "app.bsky.feed.repost",
+      "template": "https://blacksky.community/profile/{value.subject.uri|atUriAuthority}/post/{value.subject.uri|atUriRkey}"
+    },
+    {
+      "collection": "app.bsky.graph.follow",
+      "template": "https://blacksky.community/profile/{value.subject}"
+    },
+    {
+      "collection": "app.bsky.graph.block",
+      "template": "https://blacksky.community/profile/{value.subject}"
+    },
+    {
+      "collection": "app.bsky.feed.threadgate",
+      "template": "https://blacksky.community/profile/{repo}/post/{rkey}"
+    },
+    {
+      "collection": "app.bsky.feed.postgate",
+      "template": "https://blacksky.community/profile/{repo}/post/{rkey}"
+    },
+    {
+      "collection": "app.bsky.graph.listitem",
+      "template": "https://blacksky.community/profile/{value.list|atUriAuthority}/lists/{value.list|atUriRkey}",
+      "label": "List"
+    },
+    {
+      "collection": "app.bsky.graph.listitem",
+      "template": "https://blacksky.community/profile/{value.subject}",
+      "label": "Member"
+    },
+    {
+      "collection": "chat.bsky.actor.declaration",
+      "template": "https://blacksky.community/messages/settings"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}
