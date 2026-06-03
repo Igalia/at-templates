@@ -15,5 +15,8 @@
   "exports": {
     ".": "./index.js",
     "./*": "./handlers/*"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
