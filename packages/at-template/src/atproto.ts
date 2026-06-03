@@ -37,7 +37,6 @@ export function evaluateRecord(
   });
 }
 
-
 // Minimal AT Protocol helpers over plain fetch — public XRPC, no auth, no SDK.
 // Resolves a DID's PDS and reads records, so a template can dereference the
 // `at://` URIs a record points at.
@@ -84,7 +83,7 @@ async function getRecordValue(atUri: string): Promise<any> {
       u.searchParams.set("collection", collection);
       u.searchParams.set("rkey", rkey);
       const res = await fetch(u);
-      if (res.ok) value = (await res.json()).value;
+      if (res.ok) value = ((await res.json()) as any).value;
     }
   } catch {
     value = null;

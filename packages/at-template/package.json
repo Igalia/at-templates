@@ -1,16 +1,33 @@
 {
   "name": "@igalia/at-template",
   "version": "0.0.1",
-  "description": "",
+  "description": "Template language for turning AT Protocol records into URLs, with cross-record resolution.",
   "type": "module",
-  "main": "index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./*": {
+      "types": "./lib/*.d.ts",
+      "default": "./lib/*.js"
+    }
+  },
+  "files": [
+    "lib"
+  ],
   "scripts": {
+    "build": "tsc",
+    "prepack": "tsc",
     "test": "node --test"
   },
   "keywords": [],
   "author": "Nicolò Ribaudo",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^25.9.1"
+    "@types/node": "^25.9.1",
+    "typescript": "^5.7.0"
   }
 }
