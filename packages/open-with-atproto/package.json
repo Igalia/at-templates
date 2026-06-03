@@ -1,0 +1,16 @@
+{
+  "name": "open-with-atproto",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [],
+  "author": "Nicolò Ribaudo",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^25.9.1"
+  }
+}
