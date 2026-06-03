@@ -1,5 +1,5 @@
 {
-  "name": "@igalia/at-template",
+  "name": "@igalia-experiments/at-template",
   "version": "0.0.1",
   "description": "Template language for turning AT Protocol records into URLs, with cross-record resolution.",
   "type": "module",

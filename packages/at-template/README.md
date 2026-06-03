@@ -1,4 +1,4 @@
-# @igalia/at-template
+# @igalia-experiments/at-template
 
 A tiny template language for turning an AT Protocol record into a URL (or any
 string), with optional cross-record resolution.
@@ -31,7 +31,7 @@ Identifiers are `[a-zA-Z0-9]+`. Examples:
 ## Install
 
 ```bash
-pnpm add @igalia/at-template
+pnpm add @igalia-experiments/at-template
 ```
 
 ## API
@@ -41,7 +41,7 @@ pnpm add @igalia/at-template
 Splits a template into literal `parts` and parsed `expressions`.
 
 ```ts
-import { parse } from "@igalia/at-template";
+import { parse } from "@igalia-experiments/at-template";
 
 parse("https://x/{repo}/{rkey}");
 // {
@@ -61,7 +61,7 @@ The AT Protocol entry point: evaluate a parsed template against a record, fetchi
 referenced records over public XRPC when a `->` is encountered.
 
 ```ts
-import { parse, evaluateRecord } from "@igalia/at-template";
+import { parse, evaluateRecord } from "@igalia-experiments/at-template";
 
 const url = await evaluateRecord(
   parse("https://bsky.app/profile/{repo}/post/{rkey}"),

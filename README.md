@@ -17,14 +17,14 @@ but for now we're maintaining them here.
 
 ## Packages
 
-### [`packages/at-template`](packages/at-template) — `@igalia/at-template`
+### [`packages/at-template`](packages/at-template) — `@igalia-experiments/at-template`
 
 The template engine. Parses a template like
 `https://bsky.app/profile/{repo}/post/{rkey}` and evaluates it against a record,
 dereferencing `at://` URIs (`{value.publication.uri->url}`) over public XRPC when
 needed. See its [README](packages/at-template/README.md) for the language and API.
 
-### [`packages/at-app-handlers`](packages/at-app-handlers) — `@igalia/at-app-handlers`
+### [`packages/at-app-handlers`](packages/at-app-handlers) — `@igalia-experiments/at-app-handlers`
 
 The data: one JSON file per app, listing which record collections it can open and
 the URL template for each. The package's `index.js` reads them all and exports a
@@ -44,8 +44,8 @@ The `com.example.app.handlers` Lexicon schema describing a handler record.
 ## Usage
 
 ```ts
-import { parse, evaluateRecord } from "@igalia/at-template";
-import handlersByCollection from "@igalia/at-app-handlers";
+import { parse, evaluateRecord } from "@igalia-experiments/at-template";
+import handlersByCollection from "@igalia-experiments/at-app-handlers";
 
 const record = {
   collection: "app.bsky.feed.post",

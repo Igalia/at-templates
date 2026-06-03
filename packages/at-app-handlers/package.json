@@ -1,5 +1,5 @@
 {
-  "name": "@igalia/at-app-handlers",
+  "name": "@igalia-experiments/at-app-handlers",
   "version": "0.0.1",
   "description": "JSON handler definitions mapping AT Protocol record collections to the apps that can open them (com.example.app.handlers).",
   "author": "Nicolò Ribaudo",
