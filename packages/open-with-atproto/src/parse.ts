@@ -41,7 +41,7 @@ export function parse(template: string): Template {
 }
 
 
-export type Expression = ExprReference | ExprProperty | ExprCall | ExprRemote;
+export type Expression = ExprReference | ExprProperty | ExprTransform | ExprRemote;
 
 // A bare a-zA-Z0-9 identifier
 export interface ExprReference {
@@ -56,11 +56,11 @@ export interface ExprProperty {
   path: string[];
 }
 
-// A function call like `<expr>|foo`
-export interface ExprCall {
-  type: "call";
-  callee: Expression;
-  function: string;
+// A transform like `<expr>|foo`
+export interface ExprTransform {
+  type: "transform";
+  base: Expression;
+  name: string;
 }
 
 // A remote access like `<expr>->foo.bar`
@@ -102,22 +102,21 @@ class ExpressionParser {
   }
 
   parseExpression(): Expression {
-    let left: Expression = this.parseIdentifier();
+    let base: Expression = this.parseIdentifier();
 
     if (this.#pos < this.#input.length && this.#input[this.#pos] === ".") {
       this.#pos++;
-      left = { type: "property", base: left, path: this.parsePath() };
+      base = { type: "property", base, path: this.parsePath() };
     }
 
     while (this.#pos < this.#input.length) {
       let next = this.#input[this.#pos];
       if (next === "|") {
         this.#pos++;
-        const functionName = this.parseIdentifierName();
-        left = { type: "call", callee: left, function: functionName };
+        base = { type: "transform", base, name: this.parseIdentifierName() };
       } else if (next === "-" && this.#input[this.#pos + 1] === ">") {
         this.#pos += 2;
-        left = { type: "remote", base: left, path: this.parsePath() };
+        base = { type: "remote", base, path: this.parsePath() };
         this.hasRemote = true;
       } else {
         throw new Error(
@@ -126,7 +125,7 @@ class ExpressionParser {
       }
     }
 
-    return left;
+    return base;
   }
 
   parsePath(): string[] {

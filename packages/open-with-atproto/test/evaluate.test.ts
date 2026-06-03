@@ -6,8 +6,8 @@ import { evaluateSync, evaluateAsync } from "../src/evaluate.ts";
 
 // Most cases parse a template and evaluate it in one go; these helpers keep the
 // assertions focused on the input string + context rather than the AST.
-const sync = (template: string, context: any, functions?: any) =>
-  evaluateSync(parse(template), { context, functions });
+const sync = (template: string, context: any, transforms?: any) =>
+  evaluateSync(parse(template), { context, transforms });
 
 describe("evaluate", () => {
   describe("evaluateSync", () => {
@@ -46,14 +46,14 @@ describe("evaluate", () => {
       assert.throws(() => sync("{value.a.b}", { value: { a: 5 } }), /Missing property b/);
     });
 
-    it("applies a function to a value", () => {
+    it("applies a transform to a value", () => {
       assert.equal(
         sync("{value|up}", { value: "hi" }, { up: (s: string) => s.toUpperCase() }),
         "HI",
       );
     });
 
-    it("applies a function to a property access", () => {
+    it("applies a transform to a property access", () => {
       assert.equal(
         sync(
           "{value.subject.uri|rkey}",
@@ -64,7 +64,7 @@ describe("evaluate", () => {
       );
     });
 
-    it("chains functions left-to-right", () => {
+    it("chains transforms left-to-right", () => {
       assert.equal(
         sync("{a|inc|double}", { a: 1 }, { inc: (x: number) => x + 1, double: (x: number) => x * 2 }),
         "4",
@@ -80,8 +80,8 @@ describe("evaluate", () => {
       assert.equal(sync("{value}", { value: undefined }), "undefined");
     });
 
-    it("throws on an undefined function", () => {
-      assert.throws(() => sync("{a|nope}", { a: 1 }), /Undefined function: nope/);
+    it("throws on an undefined transform", () => {
+      assert.throws(() => sync("{a|nope}", { a: 1 }), /Undefined transform: nope/);
     });
 
     it("throws when the template needs remote resolution", () => {
@@ -137,12 +137,12 @@ describe("evaluate", () => {
       assert.deepEqual(seen, ["at://a", "at://b"]);
     });
 
-    it("applies a function after a remote access", async () => {
+    it("applies a transform after a remote access", async () => {
       const fetchRemote = async () => ({ url: "https://example.com/Path" });
       const result = await evaluateAsync(parse("{value.uri->url|down}"), {
         fetchRemote,
         context: { value: { uri: "at://x" } },
-        functions: { down: (s: string) => s.toLowerCase() },
+        transforms: { down: (s: string) => s.toLowerCase() },
       });
       assert.equal(result, "https://example.com/path");
     });

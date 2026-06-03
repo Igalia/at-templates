@@ -5,7 +5,7 @@ import { parse } from "../src/parse.ts";
 
 const ref = (name: string) => ({ type: "reference", name });
 const prop = (base: any, ...path: string[]) => ({ type: "property", base, path });
-const call = (callee: any, fn: string) => ({ type: "call", callee, function: fn });
+const transform = (base: any, name: string) => ({ type: "transform", base, name });
 const remote = (base: any, ...path: string[]) => ({ type: "remote", base, path });
 
 function expr(template: string) {
@@ -85,20 +85,20 @@ describe("parse", () => {
     });
   });
 
-  describe("function call", () => {
-    it("parses a call on a bare identifier", () => {
-      assert.deepEqual(expr("{value|fn}"), call(ref("value"), "fn"));
+  describe("transform", () => {
+    it("parses a transform on a bare identifier", () => {
+      assert.deepEqual(expr("{value|fn}"), transform(ref("value"), "fn"));
     });
 
-    it("parses a call applied to a property access", () => {
+    it("parses a transform applied to a property access", () => {
       assert.deepEqual(
         expr("{value.subject.uri|atUriRkey}"),
-        call(prop(ref("value"), "subject", "uri"), "atUriRkey"),
+        transform(prop(ref("value"), "subject", "uri"), "atUriRkey"),
       );
     });
 
-    it("chains calls left-to-right", () => {
-      assert.deepEqual(expr("{a|f|g}"), call(call(ref("a"), "f"), "g"));
+    it("chains transforms left-to-right", () => {
+      assert.deepEqual(expr("{a|f|g}"), transform(transform(ref("a"), "f"), "g"));
     });
   });
 
@@ -126,12 +126,12 @@ describe("parse", () => {
   });
 
   describe("mixed operators", () => {
-    it("applies a call after a remote access", () => {
-      assert.deepEqual(expr("{a->b|f}"), call(remote(ref("a"), "b"), "f"));
+    it("applies a transform after a remote access", () => {
+      assert.deepEqual(expr("{a->b|f}"), transform(remote(ref("a"), "b"), "f"));
     });
 
-    it("applies a remote access after a call", () => {
-      assert.deepEqual(expr("{a|f->b}"), remote(call(ref("a"), "f"), "b"));
+    it("applies a remote access after a transform", () => {
+      assert.deepEqual(expr("{a|f->b}"), remote(transform(ref("a"), "f"), "b"));
     });
   });
 
@@ -155,8 +155,8 @@ describe("parse", () => {
       );
       assert.deepEqual(parts, ["https://atmo.rsvp/p/", "/e/", ""]);
       assert.deepEqual(expressions, [
-        call(prop(ref("value"), "subject", "uri"), "atUriAuthority"),
-        call(prop(ref("value"), "subject", "uri"), "atUriRkey"),
+        transform(prop(ref("value"), "subject", "uri"), "atUriAuthority"),
+        transform(prop(ref("value"), "subject", "uri"), "atUriRkey"),
       ]);
       assert.equal(hasRemote, false);
     });

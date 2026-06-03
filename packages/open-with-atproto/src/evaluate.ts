@@ -4,7 +4,7 @@ interface Context {
   [name: string]: any;
 }
 
-interface Functions {
+export interface Transforms {
   [name: string]: (...args: any[]) => any;
 }
 
@@ -14,7 +14,7 @@ type OnMissing = (obj: any, property: string) => void;
 
 type EvaluateOptions = {
   context: Context;
-  functions?: Functions;
+  transforms?: Transforms;
   onMissing?: OnMissing;
 }
 
@@ -28,12 +28,12 @@ const defaultOnMissing: OnMissing = (obj, prop) => {
 
 export function evaluateSync(
   template: Template,
-  { context, functions = {}, onMissing = defaultOnMissing }: EvaluateOptions,
+  { context, transforms = {}, onMissing = defaultOnMissing }: EvaluateOptions,
 ) {
   const res = templateEvaluatorWithContext(
     template,
     context,
-    functions,
+    transforms,
     onMissing,
   ).next();
   if (!res.done) {
@@ -44,12 +44,12 @@ export function evaluateSync(
 
 export async function evaluateAsync(
   template: Template,
-  { fetchRemote, context, functions = {}, onMissing = defaultOnMissing }: EvaluateAsyncOptions,
+  { fetchRemote, context, transforms = {}, onMissing = defaultOnMissing }: EvaluateAsyncOptions,
 ) {
   const evaluator = templateEvaluatorWithContext(
     template,
     context,
-    functions,
+    transforms,
     onMissing,
   );
 
@@ -63,37 +63,32 @@ export async function evaluateAsync(
 
 type ValueRequest =
   | { type: "reference"; name: string }
-  | { type: "function"; name: string }
-  | { type: "remote"; name: string };
+  | { type: "transform"; name: string }
+  | { type: "remote"; base: string };
 
 function* templateEvaluatorWithContext(
   template: Template,
   context: Context,
-  functions: Functions,
+  transforms: Transforms,
   onMissing: OnMissing,
 ): Generator<string, string, any> {
   const tEval = templateEvaluator(template, onMissing);
 
   let res = tEval.next();
   while (!res.done) {
-    const { type, name } = res.value;
-    switch (type) {
+    switch (res.value.type) {
       case "remote": {
-        res = tEval.next(yield name);
+        res = tEval.next(yield res.value.base);
         break;
       }
-      case "reference": {
-        if (!Object.hasOwn(context, name)) {
-          throw new Error(`Undefined reference: ${name}`);
+      case "reference":
+      case "transform": {
+        const { type, name } = res.value;
+        const storage = type === "reference" ? context : transforms;
+        if (!Object.hasOwn(storage, name)) {
+          throw new Error(`Undefined ${type}: ${name}`);
         }
-        res = tEval.next(context[name]);
-        break;
-      }
-      case "function": {
-        if (!Object.hasOwn(functions, name)) {
-          throw new Error(`Undefined function: ${name}`);
-        }
-        res = tEval.next(functions[name]);
+        res = tEval.next(storage[name]);
         break;
       }
     }
@@ -123,20 +118,20 @@ function* expressionEvaluator(
 ): Generator<ValueRequest, any, any> {
   switch (expr.type) {
     case "reference": {
-      return yield { type: "reference", name: expr.name };
+      return yield expr;
     }
     case "property": {
       const base = yield* expressionEvaluator(expr.base, onMissing);
       return getPath(base, expr.path, onMissing);
     }
-    case "call": {
-      const arg = yield* expressionEvaluator(expr.callee, onMissing);
-      const fn = yield { type: "function", name: expr.function };
-      return fn(arg);
+    case "transform": {
+      const arg = yield* expressionEvaluator(expr.base, onMissing);
+      const transform = yield expr;
+      return transform(arg);
     }
     case "remote": {
       const base = yield* expressionEvaluator(expr.base, onMissing);
-      const remoteBase = yield { type: "remote", name: base };
+      const remoteBase = yield { type: "remote", base: base };
       return getPath(remoteBase, expr.path, onMissing);
     }
   }
