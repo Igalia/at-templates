@@ -2,18 +2,28 @@
 // produces a short, human-readable preview of such a record. Preview definitions
 // live under previews/, organized into subfolders; the layout is purely
 // organizational — each collection is read from the file's `collection` field.
+/**
+ * @import {RecordPreview} from "@igalia-experiments/at-record-previews";
+ */
+
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const previewsDir = new URL("../previews/", import.meta.url);
 const outFile = new URL("../index.json", import.meta.url);
 
+/** @type {Record<string, string>} */
 const byCollection = {};
 
+/**
+ * @param {URL} dir
+ * @returns {undefined}
+ */
 function collect(dir) {
   for (const ent of readdirSync(dir, { withFileTypes: true })) {
     if (ent.isDirectory()) {
       collect(new URL(`${ent.name}/`, dir));
     } else if (ent.name.endsWith(".json")) {
+      /** @type {RecordPreview} */
       const { collection, template } = JSON.parse(
         readFileSync(new URL(ent.name, dir), "utf8"),
       );

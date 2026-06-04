@@ -11,12 +11,16 @@
   },
   "files": [
     "handlers",
+    "index.d.ts",
     "index.json"
   ],
   "type": "module",
   "main": "./index.json",
   "exports": {
-    ".": "./index.json",
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.json"
+    },
     "./*": "./handlers/*"
   },
   "publishConfig": {
