@@ -1,0 +1,29 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "Grain",
+  "targets": [
+    {
+      "collection": "social.grain.actor.profile",
+      "template": "https://grain.social/profile/{repo}"
+    },
+    {
+      "collection": "social.grain.gallery",
+      "template": "https://grain.social/profile/{repo}/gallery/{rkey}"
+    },
+    {
+      "collection": "social.grain.gallery.item",
+      "template": "https://grain.social/profile/{value.gallery|atUriAuthority}/gallery/{value.gallery|atUriRkey}",
+      "label": "Gallery"
+    },
+    {
+      "collection": "social.grain.favorite",
+      "template": "https://grain.social/profile/{value.subject|atUriAuthority}/gallery/{value.subject|atUriRkey}",
+      "label": "Favorited gallery"
+    },
+    {
+      "collection": "social.grain.graph.follow",
+      "template": "https://grain.social/profile/{value.subject}"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

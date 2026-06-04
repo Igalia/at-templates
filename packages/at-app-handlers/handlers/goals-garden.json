@@ -1,0 +1,16 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "Goals Garden",
+  "targets": [
+    {
+      "collection": "garden.goals.profile",
+      "template": "https://goals.garden/{handle}"
+    },
+    {
+      "collection": "garden.goals.completion",
+      "template": "https://goals.garden/{handle}",
+      "label": "Profile"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

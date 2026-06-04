@@ -1,0 +1,17 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "Sidetrail",
+  "targets": [
+    {
+      "collection": "app.sidetrail.walk",
+      "template": "https://sidetrail.app/@{handle}/walking",
+      "label": "Walking"
+    },
+    {
+      "collection": "app.sidetrail.completion",
+      "template": "https://sidetrail.app/@{handle}/completed",
+      "label": "Completed"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

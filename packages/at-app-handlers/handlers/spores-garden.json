@@ -1,0 +1,23 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "spores.garden",
+  "targets": [
+    {
+      "collection": "coop.hypha.spores.site.profile",
+      "template": "https://spores.garden/{did}"
+    },
+    {
+      "collection": "coop.hypha.spores.site.config",
+      "template": "https://spores.garden/{did}"
+    },
+    {
+      "collection": "coop.hypha.spores.site.layout",
+      "template": "https://spores.garden/{did}"
+    },
+    {
+      "collection": "coop.hypha.spores.site.section",
+      "template": "https://spores.garden/{did}"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}
