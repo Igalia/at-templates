@@ -37,7 +37,7 @@ pnpm add @igalia-experiments/at-template
 
 ## API
 
-### `parse(template: string): Template`
+### `parse(template): Template`
 
 Splits a template into literal `parts` and parsed `expressions`.
 
