@@ -1,6 +1,6 @@
 {
   "name": "@igalia-experiments/at-template",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Template language for turning AT Protocol records into URLs, with cross-record resolution.",
   "type": "module",
   "main": "./lib/index.js",

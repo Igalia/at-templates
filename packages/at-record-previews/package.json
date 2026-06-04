@@ -1,6 +1,6 @@
 {
   "name": "@igalia-experiments/at-record-previews",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Templates for rendering short, human-readable previews of AT Protocol records (com.example.record.preview).",
   "author": "Nicolò Ribaudo",
   "license": "MIT",
