@@ -10,11 +10,15 @@ export async function fetchDidDocument(did: string): Promise<any> {
   if (docCache.has(did)) return docCache.get(did);
   let doc = null;
   try {
-    doc = await getJSON(
-      did.startsWith("did:web:")
-        ? `https://${did.slice("did:web:".length).replace(/:/g, "/")}/.well-known/did.json`
-        : `https://plc.directory/${did}`,
-    );
+    let url: URL | undefined;
+    if (did.startsWith("did:web:")) {
+      const hostPath = did.slice("did:web:".length).replace(/:/g, "/");
+      url = safeHttpsUrl(`https://${hostPath}/.well-known/did.json`);
+    } else {
+      // did:plc and others go through the public PLC directory
+      url = new URL(`https://plc.directory/${did}`);
+    }
+    if (url) doc = await getJSON(url);
   } catch {
     doc = null;
   }
@@ -25,11 +29,12 @@ export async function fetchDidDocument(did: string): Promise<any> {
 // Resolve a DID to its PDS service endpoint, or null if not found.
 async function pdsFor(authority: string): Promise<string | null> {
   const doc = await fetchDidDocument(authority);
-  return (
-    (doc?.service || []).find(
-      (s: any) => s.type === "AtprotoPersonalDataServer",
-    )?.serviceEndpoint ?? null
-  );
+  const endpoint: unknown = (doc?.service || []).find(
+    (s: any) => s.type === "AtprotoPersonalDataServer",
+  )?.serviceEndpoint;
+  if (typeof endpoint !== "string") return null;
+  // Validate the serviceEndpoint before we ever fetch against it.
+  return safeHttpsUrl(endpoint) ? endpoint : null;
 }
 
 const recordCache = new Map<string, any>();
@@ -64,4 +69,56 @@ async function getJSON(url: string | URL): Promise<any> {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
   return res.json();
+}
+
+/**
+ * Validate that a URL string is a safe `https:` URL pointing to a public host.
+ *
+ * @param href
+ *   URL string to check.
+ * @returns
+ *   URL object or nothing.
+ */
+function safeHttpsUrl(href: string): URL | undefined {
+  let url: URL | undefined;
+  try {
+    url = new URL(href);
+  } catch {}
+  if (url && url.protocol === "https:" && !hostnamePrivate(url.hostname)) {
+    return url;
+  }
+}
+
+/**
+ * Whether the hostname is a loopback address,
+ * link-local address,
+ * private-range address,
+ * or otherwise not a public internet host.
+ *
+ * @param hostname
+ *   Well-formed hostname to check.
+ * @returns
+ *   Whether the hostname is private.
+ */
+function hostnamePrivate(hostname: string): boolean {
+  // IPv6 loopback / link-local.
+  if (hostname === "::1") return true;
+  if (hostname.startsWith("[")) {
+    const inner = hostname.slice(1, -1).toLowerCase();
+    // `::1` loopback, `fe80::/10` link-local.
+    if (inner === "::1" || inner.startsWith("fe80:")) return true;
+  }
+  // Reject any hostname with no dot, single-label names are always internal.
+  if (!hostname.includes(".")) return true;
+  // IPv4 checks
+  const parts = hostname.split(".");
+  if (parts.length === 4 && parts.every((p) => /^\d+$/.test(p))) {
+    const [a, b] = parts.map(Number);
+    if (a === 10) return true; // 10.0.0.0/8
+    if (a === 127) return true; // 127.0.0.0/8 loopback
+    if (a === 169 && b === 254) return true; // 169.254.0.0/16 link-local
+    if (a === 172 && b >= 16 && b <= 31) return true; // 172.16.0.0/12
+    if (a === 192 && b === 168) return true; // 192.168.0.0/16
+  }
+  return false;
 }
