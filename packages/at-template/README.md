@@ -90,6 +90,26 @@ const url = await evaluateRecord(
   throws. Its return value is used as the resolved value, so you can supply a
   fallback or a sentinel.
 
+This library provides default `fetchRecord` and `fetchDidDocument` implementations that you can import from `@igalia-experiments/at-template/unsafe-atproto-helpers`. **They are not meant to be used in production systems, where reliability and security are important.**
+
+```js
+import { parse, evaluateRecord } from "@igalia-experiments/at-template";
+import { fetchRecord, fetchDidDocument } from "@igalia-experiments/at-template/unsafe-atproto-helpers";
+
+const url = await evaluateRecord(
+  parse("https://bsky.app/profile/{repo}/post/{rkey}"),
+  {
+    did: "did:plc:…",
+    handle: "alice.test",
+    repo: "alice.test",           // handle || did
+    collection: "app.bsky.feed.post",
+    rkey: "3kx…",
+    value: { /* the record body */ },
+  },
+  { fetchRecord, fetchDidDocument },
+);
+```
+
 ### Lower-level: `evaluateSync` / `evaluateAsync`
 
 `evaluateRecord` is sugar over these context-agnostic evaluators (also exported
