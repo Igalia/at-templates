@@ -1,0 +1,11 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "recipe.exchange",
+  "targets": [
+    {
+      "collection": "exchange.recipe.profile",
+      "template": "https://recipe.exchange/profiles/{repo}"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

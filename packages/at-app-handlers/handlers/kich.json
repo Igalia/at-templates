@@ -1,0 +1,20 @@
+{
+  "$type": "com.example.app.handlers",
+  "name": "Kich",
+  "targets": [
+    {
+      "collection": "io.kich.profile",
+      "template": "https://kich.io/profile/{repo}"
+    },
+    {
+      "collection": "io.kich.recipe.recipe",
+      "template": "https://kich.io/profile/{repo}/recipe/{rkey}"
+    },
+    {
+      "collection": "io.kich.accomplishment",
+      "template": "https://kich.io/profile/{repo}",
+      "label": "Profile"
+    }
+  ],
+  "createdAt": "2026-06-01T00:00:00.000Z"
+}

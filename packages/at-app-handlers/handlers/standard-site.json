@@ -9,6 +9,16 @@
     {
       "collection": "site.standard.document",
       "template": "{value.site->url}{value.path}"
+    },
+    {
+      "collection": "site.standard.graph.recommend",
+      "template": "{value.document->site->url}{value.document->path}",
+      "label": "Recommended post"
+    },
+    {
+      "collection": "site.standard.graph.subscription",
+      "template": "{value.publication->url}",
+      "label": "Subscribed publication"
     }
   ],
   "createdAt": "2026-06-01T00:00:00.000Z"
