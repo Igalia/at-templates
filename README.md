@@ -1,34 +1,34 @@
 # at-template
 
-Given an [AT Protocol](https://atproto.com) record, figure out _which app(s) can
-open it_ and build a deep link to each — entirely over public XRPC, no SDK and no
-auth.
+Given an [AT Protocol](https://atproto.com) record, figure out which app(s)
+can open it, how to build deep links to each, and how to show a human-friendly
+preview of the record’s content. Entirely over public XRPC. No SDK and no auth.
 
-A record's collection (e.g. `app.bsky.feed.post`, `com.whtwnd.blog.entry`) tells
-you what kind of thing it is, but not where a human can view it. This project
-closes that gap with two pieces: a curated set of per-collection _URL templates_,
-and a small template engine that fills them in — following references to other
-records when a template needs to.
+A record’s collection (such as `app.bsky.feed.post` or `com.whtwnd.blog.entry`)
+tells you what kind of thing it is, but not where a human can view it. It could
+be opened in Bluesky or WhiteWind, but maybe someone prefers something else.
+This project closes that gap with a curated set of per-collection templates and
+a small template engine that renders them into actual URLs or previews.
 
 The goal is to eventually upstream the definitions to something like
 [`community.lexicons.app`](https://github.com/lexicon-community/lexicon/pull/76),
-but for now we're maintaining them here.
+but for now we’re maintaining them here.
 
 
 ## Packages
 
 ### [`packages/at-template`](packages/at-template) — `@igalia-experiments/at-template`
 
-The template engine. Parses a template like
+Template engine. Parses a template like
 `https://bsky.app/profile/{repo}/post/{rkey}` and evaluates it against a record,
 dereferencing `at://` URIs (`{value.publication.uri->url}`) over public XRPC when
-needed. See its [README](packages/at-template/README.md) for the language and API.
+needed. See its [README](packages/at-template/README.md).
 
 ### [`packages/at-app-handlers`](packages/at-app-handlers) — `@igalia-experiments/at-app-handlers`
 
-It contains information abuot which apps can open which collections at which URL.
-
+Info about which apps can open which collections at which URL template.
 The data is available either at `@igalia-experiments/at-app-handlers`:
+
 ```jsonc
 {
   "app.bsky.feed.post": [
@@ -46,7 +46,9 @@ The data is available either at `@igalia-experiments/at-app-handlers`:
   // ...
 }
 ```
-or in individual per-app files, such as `@igalia-experiments/at-app-handlers/handlers/app.bsky.json`:
+
+…or in individual per-app files, such as `@igalia-experiments/at-app-handlers/handlers/app.bsky.json`:
+
 ```jsonc
 {
   "appName": "Bluesky",
@@ -63,7 +65,7 @@ or in individual per-app files, such as `@igalia-experiments/at-app-handlers/han
 
 ### [`packages/at-record-previews`](packages/at-record-previews) — `@igalia-experiments/at-record-previews`
 
-It contains information about how to show a human-friendly preview of a record.
+Info about how to show a human-friendly preview of a record.
 
 The data is available at `@igalia-experiments/at-record-previews` as a map from collection to a template:
 
@@ -77,7 +79,7 @@ The data is available at `@igalia-experiments/at-record-previews` as a map from 
 }
 ```
 
-or in individual per-collection files, such as `@igalia-experiments/at-record-previews/previews/app/bsky/app.bsky.feed.post.json`:
+…or in individual per-collection files, such as `@igalia-experiments/at-record-previews/previews/app/bsky/app.bsky.feed.post.json`:
 
 ```jsonc
 {
@@ -94,7 +96,7 @@ Lexicon schemas.
 ## Usage
 
 ```ts
-import { parse, evaluateRecord } from "@igalia-experiments/at-template";
+import { evaluateRecord, parse } from "@igalia-experiments/at-template";
 import handlersByCollection from "@igalia-experiments/at-app-handlers" with { type: "json" };
 
 const record = {
@@ -116,4 +118,4 @@ for (const { appName, urlTemplate, label } of handlers) {
 
 ## License
 
-[MIT](LICENSE) © Igalia
+[MIT](LICENSE) © [Igalia](https://www.igalia.com)
